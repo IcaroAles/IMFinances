@@ -21,4 +21,25 @@ public record Money(long centavos) {
             return new ResultadoMoney.Sucesso(Money.emCentavos(centavos));
         }
     }
+
+    public boolean ehPositivo() {
+        return this.centavos > 0;
+    }
+
+    public Money somar(Money outro) {
+        return Money.emCentavos(outro.centavos() + this.centavos());
+    }
+
+    public record Divisao(Money base, Money resto) {
+    }
+
+    public Divisao dividir(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("O valor inserido:" + n + " precisa ser no mínimo 1");
+        }
+        long base = this.centavos / n;
+        long resto = this.centavos % n;
+
+        return new Divisao(Money.emCentavos(base), Money.emCentavos(resto));
+    }
 }
