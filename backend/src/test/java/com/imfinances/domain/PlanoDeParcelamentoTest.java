@@ -67,4 +67,13 @@ class PlanoDeParcelamentoTest {
 
         assertThat(planoTeste.parcelas()).containsExactly(Money.emCentavos(5), Money.emCentavos(5), Money.emCentavos(5));
     }
+
+    @Test
+    void sobraMaiorQue1VaiParaPrimeiraParcela() {
+        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(10000), 7);
+        if (!(contateste instanceof ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano))) {
+            throw new AssertionError("deveria ter aceitado, veio: " + contateste);
+        }
+        assertThat(plano.parcelas()).containsExactly(Money.emCentavos(1432), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428));
+    }
 }
