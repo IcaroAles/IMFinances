@@ -119,5 +119,4 @@ mvn test
 ## Desenvolvedor
 
 **Icaro Nery** - Desenvolvedor Back-End Júnior
-
-<!-- adicionar LinkedIn -->
+**Linkedin** - https://www.linkedin.com/in/icaro-nery-93611a321/
