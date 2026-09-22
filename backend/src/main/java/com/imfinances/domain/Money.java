@@ -22,6 +22,14 @@ public record Money(long centavos) {
         }
     }
 
+    public static ResultadoMoney emCentavosEntrada(long valor) {
+        if (valor < 0) {
+            return new ResultadoMoney.Falha("O valor recebido foi " + valor + " e é negativo/menor do que 0.");
+        } else {
+            return new ResultadoMoney.Sucesso(Money.emCentavos(valor));
+        }
+    }
+
     public boolean ehPositivo() {
         return this.centavos > 0;
     }

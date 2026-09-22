@@ -84,4 +84,25 @@ class MoneyTest {
 
         assertThat(total.centavos()).isEqualTo(reconstrucao);
     }
+
+    @Test
+    void emCentavosEntradaFalhaNegativo() {
+        ResultadoMoney nn = Money.emCentavosEntrada(-1);
+        assertThat(nn).isInstanceOf(ResultadoMoney.Falha.class);
+    }
+
+    @Test
+    void emCentavosEntradaAceita0() {
+        ResultadoMoney nn = Money.emCentavosEntrada(0);
+        assertThat(nn).isInstanceOf(ResultadoMoney.Sucesso.class);
+    }
+
+    @Test
+    void emCentavosEntradaAceitaValorNormal() {
+        ResultadoMoney r = Money.emCentavosEntrada(1080);
+        if (!(r instanceof ResultadoMoney.Sucesso(Money valor))) {
+            throw new AssertionError("deveria ter aceitado, veio: " + r);
+        }
+        assertThat(valor.centavos()).isEqualTo(1080);
+    }
 }
