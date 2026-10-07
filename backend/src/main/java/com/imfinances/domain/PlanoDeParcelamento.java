@@ -2,7 +2,6 @@ package com.imfinances.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public record PlanoDeParcelamento(List<Money> parcelas) {
     public PlanoDeParcelamento {
@@ -30,13 +29,13 @@ public record PlanoDeParcelamento(List<Money> parcelas) {
         return totalDinheiro;
     }
 
-    public static ResultadoParcelamento parcelar(Money total, int n) {
+    public static Resultado<PlanoDeParcelamento> parcelar(Money total, int n) {
         if (n <= 1) {
-            return new ResultadoParcelamento.Falha("O valor recebido " + n + " deve ser maior ou igual a 2");
+            return new Resultado.Falha<>("O valor recebido " + n + " deve ser maior ou igual a 2");
         }
         Money.Divisao divisaoParcelar = total.dividir(n);
         if (!divisaoParcelar.base().ehPositivo()) {
-            return new ResultadoParcelamento.Falha("Divisão não pode ser feita pois o total é menor do que o numero de parcelas");
+            return new Resultado.Falha<>("Divisão não pode ser feita pois o total é menor do que o numero de parcelas");
         }
         List<Money> listaParcelas = new ArrayList<>();
         Money primeiraParcela = divisaoParcelar.base().somar(divisaoParcelar.resto());
@@ -45,6 +44,6 @@ public record PlanoDeParcelamento(List<Money> parcelas) {
             listaParcelas.add(divisaoParcelar.base());
         }
         PlanoDeParcelamento planoParcelar = new PlanoDeParcelamento(listaParcelas);
-        return new ResultadoParcelamento.Sucesso(planoParcelar);
+        return new Resultado.Sucesso<>(planoParcelar);
     }
 }

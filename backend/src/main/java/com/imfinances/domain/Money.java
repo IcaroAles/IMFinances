@@ -11,22 +11,22 @@ public record Money(long centavos) {
         return new Money(valor);
     }
 
-    public static ResultadoMoney emReais(double valor) {
+    public static Resultado<Money> emReais(double valor) {
         if (!Double.isFinite(valor)) {
-            return new ResultadoMoney.Falha("O valor recebido foi " + valor + " e ele não é finito.");
+            return new Resultado.Falha<>("O valor recebido foi " + valor + " e ele não é finito.");
         } else if (valor < 0) {
-            return new ResultadoMoney.Falha("O valor recebido foi " + valor + " e é negativo/menor do que 0.");
+            return new Resultado.Falha<>("O valor recebido foi " + valor + " e é negativo/menor do que 0.");
         } else {
             long centavos = Math.round(valor * 100);
-            return new ResultadoMoney.Sucesso(Money.emCentavos(centavos));
+            return new Resultado.Sucesso<>(Money.emCentavos(centavos));
         }
     }
 
-    public static ResultadoMoney emCentavosEntrada(long valor) {
+    public static Resultado<Money> emCentavosEntrada(long valor) {
         if (valor < 0) {
-            return new ResultadoMoney.Falha("O valor recebido foi " + valor + " e é negativo/menor do que 0.");
+            return new Resultado.Falha<>("O valor recebido foi " + valor + " e é negativo/menor do que 0.");
         } else {
-            return new ResultadoMoney.Sucesso(Money.emCentavos(valor));
+            return new Resultado.Sucesso<>(Money.emCentavos(valor));
         }
     }
 

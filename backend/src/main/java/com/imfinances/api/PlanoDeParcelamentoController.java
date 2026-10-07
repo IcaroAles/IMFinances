@@ -1,9 +1,6 @@
 package com.imfinances.api;
 
-import com.imfinances.domain.Money;
-import com.imfinances.domain.PlanoDeParcelamento;
-import com.imfinances.domain.ResultadoMoney;
-import com.imfinances.domain.ResultadoParcelamento;
+import com.imfinances.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,14 +14,14 @@ public class PlanoDeParcelamentoController {
 
     @PostMapping("/planos-de-parcelamento")
     public ResponseEntity<?> devolvePlanoDeParcelamento(@RequestBody PlanoDeParcelamentoRequest request) {
-        ResultadoMoney resultadoTotal = Money.emCentavosEntrada(request.totalCompraEmCentavos());
+        Resultado<Money> resultadoTotal = Money.emCentavosEntrada(request.totalCompraEmCentavos());
 
         switch (resultadoTotal) {
-            case ResultadoMoney.Sucesso(Money valor) -> {
+            case Resultado.Sucesso<Money>(Money valor) -> {
 
-                ResultadoParcelamento parcelamento = PlanoDeParcelamento.parcelar(valor, request.quantidadeParcelas());
+                Resultado<PlanoDeParcelamento> parcelamento = PlanoDeParcelamento.parcelar(valor, request.quantidadeParcelas());
                 switch (parcelamento) {
-                    case ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano) -> {
+                    case Resultado.Sucesso<PlanoDeParcelamento>(PlanoDeParcelamento plano) -> {
                         List<Long> listaNova = new ArrayList<>();
                         for (Money p : plano.parcelas()) {
                             listaNova.add(p.centavos());
@@ -32,14 +29,14 @@ public class PlanoDeParcelamentoController {
                         PlanoDeParcelamentoResponse response = new PlanoDeParcelamentoResponse(listaNova, plano.total().centavos(), plano.quantidade());
                         return ResponseEntity.ok(response);
                     }
-                    case ResultadoParcelamento.Falha(String erro) -> {
+                    case Resultado.Falha<PlanoDeParcelamento>(String erro) -> {
                         ErroResponse erroResponse = new ErroResponse(erro);
                         return ResponseEntity.badRequest().body(erroResponse);
                     }
                 }
 
             }
-            case ResultadoMoney.Falha(String erro) -> {
+            case Resultado.Falha<Money>(String erro) -> {
                 ErroResponse erroResponse = new ErroResponse(erro);
                 return ResponseEntity.badRequest().body(erroResponse);
             }

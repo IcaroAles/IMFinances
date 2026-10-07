@@ -15,8 +15,8 @@ class PlanoDeParcelamentoTest {
 
     @Test
     void sobraVaiParaPrimeiraParcela() {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(4), 3);
-        if (!(contateste instanceof ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano))) {
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(4), 3);
+        if (!(contateste instanceof Resultado.Sucesso(PlanoDeParcelamento plano))) {
             throw new AssertionError("deveria ter aceitado, veio: " + contateste);
         }
         assertThat(plano.parcelas()).containsExactly(Money.emCentavos(2), Money.emCentavos(1), Money.emCentavos(1));
@@ -24,8 +24,8 @@ class PlanoDeParcelamentoTest {
 
     @Test
     void parcelaExataQuandoNIgualTotal() {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(3), 3);
-        if (!(contateste instanceof ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano))) {
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(3), 3);
+        if (!(contateste instanceof Resultado.Sucesso(PlanoDeParcelamento plano))) {
             throw new AssertionError("deveria ter aceitado, veio: " + contateste);
         }
         assertThat(plano.parcelas()).containsExactly(Money.emCentavos(1), Money.emCentavos(1), Money.emCentavos(1));
@@ -33,14 +33,14 @@ class PlanoDeParcelamentoTest {
 
     @Test
     void falhaParcelasDemais() {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(5), 6);
-        assertThat(contateste).isInstanceOf(ResultadoParcelamento.Falha.class);
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(5), 6);
+        assertThat(contateste).isInstanceOf(Resultado.Falha.class);
     }
 
     @Test
     void falhaUmaParcela() {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(150), 1);
-        assertThat(contateste).isInstanceOf(ResultadoParcelamento.Falha.class);
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(150), 1);
+        assertThat(contateste).isInstanceOf(Resultado.Falha.class);
     }
 
     @Property
@@ -48,8 +48,8 @@ class PlanoDeParcelamentoTest {
             @ForAll @LongRange(min = 25, max = 100000000) long total,
             @ForAll @IntRange(min = 2, max = 24) int n
     ) {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(total), n);
-        if (!(contateste instanceof ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano))) {
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(total), n);
+        if (!(contateste instanceof Resultado.Sucesso(PlanoDeParcelamento plano))) {
             throw new AssertionError("deveria ter aceitado, veio: " + contateste);
         }
 
@@ -70,8 +70,8 @@ class PlanoDeParcelamentoTest {
 
     @Test
     void sobraMaiorQue1VaiParaPrimeiraParcela() {
-        ResultadoParcelamento contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(10000), 7);
-        if (!(contateste instanceof ResultadoParcelamento.Sucesso(PlanoDeParcelamento plano))) {
+        Resultado<PlanoDeParcelamento> contateste = PlanoDeParcelamento.parcelar(Money.emCentavos(10000), 7);
+        if (!(contateste instanceof Resultado.Sucesso(PlanoDeParcelamento plano))) {
             throw new AssertionError("deveria ter aceitado, veio: " + contateste);
         }
         assertThat(plano.parcelas()).containsExactly(Money.emCentavos(1432), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428), Money.emCentavos(1428));

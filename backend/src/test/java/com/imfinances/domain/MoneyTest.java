@@ -27,8 +27,8 @@ class MoneyTest {
     @Test
     void emReaisDevolveCentavos() {
         // Java
-        ResultadoMoney r = Money.emReais(0.29);
-        if (!(r instanceof ResultadoMoney.Sucesso(Money valor))) {
+        Resultado<Money> r = Money.emReais(0.29);
+        if (!(r instanceof Resultado.Sucesso<Money>(Money valor))) {
             throw new AssertionError("deveria ter aceitado, veio: " + r);
         }
         assertThat(valor.centavos()).isEqualTo(29L);
@@ -36,14 +36,14 @@ class MoneyTest {
 
     @Test
     void emReaisFalhaNegativo() {
-        ResultadoMoney r = Money.emReais(-5);
-        assertThat(r).isInstanceOf(ResultadoMoney.Falha.class);
+        Resultado<Money> r = Money.emReais(-5);
+        assertThat(r).isInstanceOf(Resultado.Falha.class);
     }
 
     @Test
     void emReaisFalhaNaN() {
-        ResultadoMoney nn = Money.emReais(Double.NaN);
-        assertThat(nn).isInstanceOf(ResultadoMoney.Falha.class);
+        Resultado<Money> nn = Money.emReais(Double.NaN);
+        assertThat(nn).isInstanceOf(Resultado.Falha.class);
     }
 
     @Test
@@ -87,20 +87,20 @@ class MoneyTest {
 
     @Test
     void emCentavosEntradaFalhaNegativo() {
-        ResultadoMoney nn = Money.emCentavosEntrada(-1);
-        assertThat(nn).isInstanceOf(ResultadoMoney.Falha.class);
+        Resultado<Money> nn = Money.emCentavosEntrada(-1);
+        assertThat(nn).isInstanceOf(Resultado.Falha.class);
     }
 
     @Test
     void emCentavosEntradaAceita0() {
-        ResultadoMoney nn = Money.emCentavosEntrada(0);
-        assertThat(nn).isInstanceOf(ResultadoMoney.Sucesso.class);
+        Resultado<Money> nn = Money.emCentavosEntrada(0);
+        assertThat(nn).isInstanceOf(Resultado.Sucesso.class);
     }
 
     @Test
     void emCentavosEntradaAceitaValorNormal() {
-        ResultadoMoney r = Money.emCentavosEntrada(1080);
-        if (!(r instanceof ResultadoMoney.Sucesso(Money valor))) {
+        Resultado<Money> r = Money.emCentavosEntrada(1080);
+        if (!(r instanceof Resultado.Sucesso(Money valor))) {
             throw new AssertionError("deveria ter aceitado, veio: " + r);
         }
         assertThat(valor.centavos()).isEqualTo(1080);
